@@ -5,7 +5,7 @@ import subprocess
 
 # Clone the repository
 subprocess.run(
-    ['git', 'clone', 'https://github.com/rishavnandi/ansible_homelab.git'])
+    ['git', 'clone', 'https://github.com/zaffron/ansible_homelab.git'])
 os.chdir('ansible_homelab')
 
 # Read user input
@@ -27,6 +27,8 @@ gmail_address = input("Enter gmail address for authelia smtp: ")
 gmail_password = input("Enter gmail insecure app password for authelia smtp: ")
 admin_email = input("Enter email for authelia admin: ")
 admin_password = input("Enter argon2id password hash for authelia admin: ")
+photoprism_mysql_root_password = input("Enter mysql root password for photoprism: ")
+photoprism_mysql_password = input("Enter mysql password for photoprism: ")
 
 # Replace values in vars.yml file
 with open('group_vars/all/vars.yml', 'r') as f:
@@ -48,6 +50,8 @@ content = content.replace('<google_email>', gmail_address)
 content = content.replace('<google_insecure_app_pass>', gmail_password)
 content = content.replace('<authelia_admin_mail>', admin_email)
 content = content.replace('<authelia_admin_argon2id_pass>', admin_password)
+content = content.replace('<photoprism_mysql_root_password>', photoprism_mysql_root_password)
+content = content.replace('<photoprism_mysql_password>', photoprism_mysql_password)
 with open('group_vars/all/vars.yml', 'w') as f:
     f.write(content)
 

@@ -1,0 +1,18 @@
+---
+- name: Create photoprism mysql container
+  community.docker.docker_container:
+    name: photoprism-mariadb
+    image: mariadb:latest
+    state: started
+    restart: unless-stopped
+    pull: true
+    volumes:
+      - {{ docker_dir }}/photoprism/db:/var/lib/mysql
+    networks:
+      - name: homelab
+    environment:
+      - TZ={{ timezone }}
+      - MYSQL_ROOT_PASSWORD={{ photoprism_mysql_root_password }}
+      - MYSQL_DATABASE={{ photoprism_mysql_db }}
+      - MYSQL_USER={{ photoprism_mysql_user }}
+      - MYSQL_PASSWORD={{ photoprism_mysql_password }}

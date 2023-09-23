@@ -60,3 +60,9 @@ docker_packages:
   - containerd.io
   - docker-buildx-plugin
   - docker-compose-plugin
+
+# photoprism
+photoprism_mysql_root_password: "<photoprism_mysql_root_password>"
+photoprism_mysql_db: "photoprism"
+photoprism_mysql_user: "photoprism"
+photoprism_mysql_password: "<photoprism_mysql_password>"

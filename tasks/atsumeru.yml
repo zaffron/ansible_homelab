@@ -1,0 +1,29 @@
+---
+- name: Create atsumeru container
+  community.docker.docker_container:
+    name: atsumeru
+    image: atsumerudev/atsumeru:latest
+    pull: true
+    state: started
+    restart_policy: unless-stopped
+    volumes:
+      - "{{ docker_dir }}/atsumeru/library:/library"
+      - "{{ docker_dir }}/atsumeru/config:/app/config"
+      - "{{ docker_dir }}/atsumeru/db:/app/database"
+      - "{{ docker_dir }}/atsumeru/cache:/app/cache"
+      - "{{ docker_dir }}/atsumeru/logs:/app/logs"
+    networks:
+      - name: homelab
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.atsumeru.entrypoints: "http"
+      traefik.http.routers.atsumeru.rule: "Host(`atsumeru.{{ domain }}`)"
+      traefik.http.middlewares.atsumeru-https-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.atsumeru.middlewares: "atsumeru-https-redirect"
+      traefik.http.routers.atsumeru-secure.entrypoints: "https"
+      traefik.http.routers.atsumeru-secure.rule: "Host(`atsumeru.{{ domain }}`)"
+      traefik.http.routers.atsumeru-secure.tls: "true"
+      traefik.http.routers.atsumeru-secure.service: "atsumeru"
+      traefik.http.routers.atsumeru-secure.middlewares: "authelia@docker"
+      traefik.http.services.atsumeru.loadbalancer.server.port: "31337"
+      traefik.docker.network: "homelab"
